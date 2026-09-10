@@ -55,3 +55,45 @@ Each cycle prints one block:
 A high ETag hit rate is the goal: those queries cost one request and no scoring
 work. `deferred at floor` means the rate-limit guard stopped handing out calls
 with budget still reserved for the request path.
+
+## Curated repository pass
+
+Alongside the language search matrix, the fetcher can walk a vendored list of
+repositories that reliably label newcomer issues. The list comes from the
+[Good First Issue](https://github.com/DeepSourceCorp/good-first-issue) project
+by DeepSource, MIT licensed, and lives in `data/curated-repos.json`. Only the
+repository names are reused; every issue is fetched live from GitHub.
+
+Why it exists: the search matrix finds issues by label and language, which
+favours large repositories in popular languages. Walking a known-good list
+reaches the long tail those searches miss.
+
+```
+GET /api/cron/fetch-issues?curated=1&offset=0&count=15
+```
+
+| Parameter | Meaning |
+| --- | --- |
+| `curated=1` | run the curated pass instead of the search matrix |
+| `offset` | index into the list to start from |
+| `count` | repositories to walk on this call, default 15 |
+
+One repository costs one search call, and GitHub allows 30 searches a minute,
+so a full pass over the list cannot fit in a single 60-second invocation. The
+reply carries `nextOffset`; feed it back in to resume, and `wrapped` turns true
+when the pass reaches the end.
+
+```bash
+offset=0
+while :; do
+  r=$(curl -s -H "Authorization: Bearer $CRON_SECRET" \
+    "$APP_URL/api/cron/fetch-issues?curated=1&offset=$offset&count=15")
+  echo "$r"
+  echo "$r" | grep -q '"wrapped":true' && break
+  offset=$(echo "$r" | python3 -c 'import sys,json;print(json.load(sys.stdin)["nextOffset"])')
+done
+```
+
+A repository that has been renamed, deleted or made private returns 404. That
+is expected on a vendored list and is counted as a failure without stopping the
+pass.
