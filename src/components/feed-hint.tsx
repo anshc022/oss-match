@@ -36,7 +36,7 @@ export function FeedHint() {
       <Button
         variant="ghost"
         size="icon"
-        className="size-7 shrink-0 text-muted-foreground"
+        className="size-9 shrink-0 text-muted-foreground sm:size-7"
         aria-label="Dismiss hint"
         onClick={() => {
           setShow(false);

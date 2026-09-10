@@ -28,8 +28,8 @@ export function SiteHeader() {
 
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
-      <div className="container flex h-14 items-center gap-6">
-        <Link href="/" className="flex items-center gap-2">
+      <div className="container flex h-14 items-center gap-3 sm:gap-6">
+        <Link href="/" className="flex shrink-0 items-center gap-2 py-2">
           <Blocks className="size-5 text-primary" />
           <span className="font-mono text-sm font-semibold tracking-tight">
             oss<span className="text-primary">/</span>match
@@ -45,13 +45,15 @@ export function SiteHeader() {
                 variant="ghost"
                 size="sm"
                 className={cn(
-                  "font-mono text-xs text-muted-foreground",
+                  // Icon-only on phones: the two labels alone are wide enough
+                  // to push the header past a 390px screen.
+                  "h-9 px-2.5 font-mono text-xs text-muted-foreground sm:h-8 sm:px-3",
                   pathname.startsWith(item.href) && "bg-accent text-foreground",
                 )}
               >
-                <Link href={item.href}>
-                  <item.icon className="size-3.5" />
-                  {item.label}
+                <Link href={item.href} title={item.label}>
+                  <item.icon className="size-4 sm:size-3.5" />
+                  <span className="sr-only sm:not-sr-only">{item.label}</span>
                 </Link>
               </Button>
             ))}
