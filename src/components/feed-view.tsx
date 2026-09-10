@@ -60,7 +60,7 @@ export function FeedView({ hacktoberfestMode = false }: { hacktoberfestMode?: bo
           <ToggleGroupItem
             value="swipe"
             aria-label="Swipe one card at a time"
-            className="h-7 gap-1.5 rounded-full px-3 font-mono text-[11px] data-[state=on]:bg-iris data-[state=on]:text-primary-foreground"
+            className="h-9 gap-1.5 rounded-full px-3.5 font-mono text-[11px] data-[state=on]:bg-iris data-[state=on]:text-primary-foreground sm:h-7 sm:px-3"
           >
             <Layers className="size-3" />
             Swipe
@@ -68,7 +68,7 @@ export function FeedView({ hacktoberfestMode = false }: { hacktoberfestMode?: bo
           <ToggleGroupItem
             value="list"
             aria-label="Browse as a list"
-            className="h-7 gap-1.5 rounded-full px-3 font-mono text-[11px] data-[state=on]:bg-iris data-[state=on]:text-primary-foreground"
+            className="h-9 gap-1.5 rounded-full px-3.5 font-mono text-[11px] data-[state=on]:bg-iris data-[state=on]:text-primary-foreground sm:h-7 sm:px-3"
           >
             <LayoutList className="size-3" />
             List
@@ -81,7 +81,7 @@ export function FeedView({ hacktoberfestMode = false }: { hacktoberfestMode?: bo
             pressed={feed.hacktoberfestOnly}
             onPressedChange={feed.setHacktoberfestOnly}
             aria-label="Show only Hacktoberfest issues"
-            className="h-7 gap-1.5 rounded-full border border-border/60 px-3 font-mono text-[11px] text-muted-foreground data-[state=on]:border-amber/40 data-[state=on]:bg-amber/10 data-[state=on]:text-amber"
+            className="h-9 gap-1.5 rounded-full border border-border/60 px-3.5 font-mono text-[11px] text-muted-foreground data-[state=on]:border-amber/40 data-[state=on]:bg-amber/10 data-[state=on]:text-amber sm:h-7 sm:px-3"
           >
             <Leaf className="size-3" />
             Hacktoberfest only
