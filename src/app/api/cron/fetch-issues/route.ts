@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { timingSafeEqual } from "node:crypto";
 import { runFetchCycle } from "@/lib/fetcher/fetch-issues";
+import { runCuratedPass } from "@/lib/fetcher/fetch-curated";
 import { logFetchCycle } from "@/lib/fetcher/report";
 import { describeAuth } from "@/lib/github-app-client";
 import { boostMode, hacktoberfestMode } from "@/lib/fetcher/queries";
@@ -28,6 +29,12 @@ export async function GET(req: Request) {
   // skips the issue queries so a call can be spent entirely on that.
   const mentorsLimit = Number(url.searchParams.get("mentors")) || undefined;
   const skipIssues = url.searchParams.get("issues") === "false";
+  // ?curated=1 walks the vendored repository list instead of the search
+  // matrix. One search per repository means a full pass needs many calls, so
+  // ?offset= resumes where the last one stopped and the reply says where next.
+  const curated = url.searchParams.get("curated") === "1";
+  const curatedOffset = Number(url.searchParams.get("offset")) || 0;
+  const curatedCount = Number(url.searchParams.get("count")) || 15;
 
   const health = await describeAuth();
   if (!health.ok) {
@@ -36,6 +43,29 @@ export async function GET(req: Request) {
     );
   } else {
     console.log(`[fetch] auth ok (mode=${health.mode}, ${health.detail})`);
+  }
+
+  if (curated) {
+    try {
+      const report = await runCuratedPass({
+        offset: curatedOffset,
+        count: curatedCount,
+        force,
+        deadlineMs: 40_000,
+      });
+      console.log(
+        `[curated] ${report.offset}-${report.offset + report.reposRun} of ${report.total} | ` +
+          `${report.issuesUpserted} issues | ${report.failures} failures | ` +
+          `search left: ${report.searchRemaining ?? "?"}`,
+      );
+      return NextResponse.json({ ok: true, mode: "curated", ...report, results: undefined });
+    } catch (err) {
+      console.error("[curated] pass threw:", err);
+      return NextResponse.json(
+        { ok: false, error: err instanceof Error ? err.message : "curated pass failed" },
+        { status: 500 },
+      );
+    }
   }
 
   try {
