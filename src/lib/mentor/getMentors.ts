@@ -1,3 +1,4 @@
+import { afterResponse } from "@/lib/after-response";
 import { dbConnect } from "@/lib/mongodb";
 import { RepoMeta } from "@/models/RepoMeta";
 import { fetcherOctokit } from "@/lib/github-app-client";
@@ -74,5 +75,5 @@ export async function computeMentors(
 
 /** Kick off a refresh without waiting for it. */
 export function refreshMentorsInBackground(fullName: string) {
-  void computeMentors(fullName);
+  afterResponse(computeMentors(fullName));
 }

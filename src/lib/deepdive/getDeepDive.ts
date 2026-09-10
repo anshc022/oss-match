@@ -1,3 +1,4 @@
+import { afterResponse } from "@/lib/after-response";
 import { dbConnect } from "@/lib/mongodb";
 import { RepoMeta } from "@/models/RepoMeta";
 import { Issue } from "@/models/Issue";
@@ -134,5 +135,5 @@ export function flattenPaths(tree: TreeNode): string[] {
 }
 
 export function startDeepDiveInBackground(repo: string, issueId?: string) {
-  void generateDeepDive(repo, issueId);
+  afterResponse(generateDeepDive(repo, issueId));
 }

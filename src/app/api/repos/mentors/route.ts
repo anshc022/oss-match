@@ -4,6 +4,10 @@ import { readMentors, refreshMentorsInBackground } from "@/lib/mentor/getMentors
 import { llmAvailable } from "@/lib/llm";
 
 export const dynamic = "force-dynamic";
+// The refresh now runs through waitUntil rather than being dropped when the
+// response is sent, so the instance has to be allowed to live long enough to
+// finish it: roughly ten GitHub calls plus one bounded model call.
+export const maxDuration = 60;
 
 const REPO_RE = /^[\w.-]+\/[\w.-]+$/;
 
