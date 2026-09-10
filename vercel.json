@@ -15,6 +15,9 @@
     },
     "src/app/api/repos/deepdive/route.ts": {
       "maxDuration": 60
+    },
+    "src/app/api/repos/mentors/route.ts": {
+      "maxDuration": 60
     }
   }
 }
