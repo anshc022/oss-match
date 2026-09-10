@@ -1,11 +1,43 @@
 import type { NextAuthOptions } from "next-auth";
 import GitHubProvider from "next-auth/providers/github";
+import CredentialsProvider from "next-auth/providers/credentials";
 import { getServerSession } from "next-auth";
 import { dbConnect } from "@/lib/mongodb";
 import { User } from "@/models/User";
+import { DEMO_USER, demoMode } from "@/lib/demo";
 
 export const authOptions: NextAuthOptions = {
   providers: [
+    // Only present when every demo-mode gate passes, so this cannot appear on
+    // a deployed build even if DEMO_MODE leaks into the environment.
+    ...(demoMode()
+      ? [
+          CredentialsProvider({
+            id: "demo",
+            name: "Demo account",
+            credentials: {},
+            async authorize() {
+              await dbConnect();
+              const user = await User.findOneAndUpdate(
+                { githubId: DEMO_USER.githubId },
+                {
+                  $setOnInsert: {
+                    ...DEMO_USER,
+                    languages: ["TypeScript", "Python"],
+                    interests: [],
+                    level: "beginner",
+                    suggestedLanguages: [],
+                    skillGraphStatus: "skipped",
+                    onboardedAt: new Date(),
+                  },
+                },
+                { upsert: true, new: true },
+              );
+              return { id: String(user._id), name: user.name, email: null };
+            },
+          }),
+        ]
+      : []),
     GitHubProvider({
       clientId: process.env.GITHUB_CLIENT_ID ?? "",
       clientSecret: process.env.GITHUB_CLIENT_SECRET ?? "",
@@ -16,7 +48,17 @@ export const authOptions: NextAuthOptions = {
   session: { strategy: "jwt" },
   pages: { signIn: "/" },
   callbacks: {
-    async jwt({ token, account, profile }) {
+    async jwt({ token, account, profile, user }) {
+      // A demo sign-in carries no OAuth profile, so it is keyed off the user
+      // the credentials provider returned instead.
+      if (demoMode() && account?.provider === "demo" && user) {
+        await dbConnect();
+        const demo = await User.findById(user.id).lean();
+        token.uid = String(user.id);
+        token.username = demo?.username ?? DEMO_USER.username;
+        token.avatarUrl = demo?.avatarUrl ?? "";
+      }
+
       // `account` is only present on the sign-in request itself.
       if (account && profile) {
         const gh = profile as {

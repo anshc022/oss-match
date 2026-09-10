@@ -13,6 +13,7 @@ Comment on the issue you want, and it is yours.
 ## Table of contents
 
 - [Ways to help](#ways-to-help)
+- [Run it in one command](#run-it-in-one-command)
 - [Set up your local copy](#set-up-your-local-copy)
 - [Run the app](#run-the-app)
 - [Making a change](#making-a-change)
@@ -39,7 +40,56 @@ Code is one way, not the only one.
 
 ---
 
+## Run it in one command
+
+Most changes do not need a database, a GitHub app or any keys. Start here:
+
+```bash
+git clone https://github.com/YOUR-USERNAME/oss-match.git
+cd oss-match
+npm install
+npm run demo
+```
+
+Open <http://localhost:3000> and press **Continue with the demo account**.
+
+That is the whole setup. `npm run demo` starts a temporary in-memory database,
+seeds it with real issues from `fixtures/demo-issues.json`, and signs you in as
+a local account so you never touch GitHub's OAuth. Nothing is written to disk
+and nothing survives the process, so you can stop it with Ctrl+C and start
+again from clean whenever you like.
+
+The first run downloads MongoDB's binaries, which takes a minute. After that it
+starts in seconds.
+
+The demo sign-in is deliberately impossible to enable on a deployed build. It
+needs `DEMO_MODE=true`, refuses when `NODE_ENV` is `production`, and refuses
+whenever `VERCEL` is set. See `src/lib/demo.ts` and `tests/demo.test.ts`.
+
+The seeded issues go stale as they get closed. Refresh them with:
+
+```bash
+gh auth login          # once
+npm run fixtures
+```
+
+### When the demo is not enough
+
+You need the full setup below only if you are working on:
+
+- **sign-in itself**, since the demo bypasses it
+- **the background fetcher**, which talks to GitHub's search API
+- **the AI features**, which need a model endpoint
+
+Everything else, including the whole interface, the matching algorithm, the
+contribution guide and the saved list, works in demo mode.
+
+---
+
 ## Set up your local copy
+
+Skip this unless you are working on sign-in, the fetcher or the AI features.
+For anything else, [one command](#run-it-in-one-command) is enough.
 
 You need **Node.js 20 or newer** and **npm**. Check with `node --version`.
 

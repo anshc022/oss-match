@@ -35,14 +35,36 @@ GitHub OAuth · Tailwind + shadcn/ui · Octokit · react-tinder-card ·
 
 ## Getting started
 
+Run it with nothing to set up:
+
 ```bash
 npm install
+npm run demo
+```
+
+Open <http://localhost:3000> and press **Continue with the demo account**.
+
+`npm run demo` starts a temporary in-memory database, seeds it with real issues
+from `fixtures/demo-issues.json`, and signs you in as a local account, so there
+is no database to provision and no GitHub OAuth app to register. Nothing is
+written to disk. The first run downloads MongoDB's binaries, which takes about a
+minute.
+
+The demo sign-in cannot be enabled on a deployed build: it needs
+`DEMO_MODE=true`, refuses when `NODE_ENV` is `production`, and refuses whenever
+`VERCEL` is set. The gates are asserted in `tests/demo.test.ts`.
+
+### The full setup
+
+Needed only for work on sign-in, the background fetcher or the AI features:
+
+```bash
 cp .env.example .env.local   # then fill it in
 npm run dev
 ```
 
-You need a MongoDB instance and a GitHub OAuth app. `.env.example` documents
-every variable, including the callback URL to register.
+That path needs a MongoDB instance and a GitHub OAuth app. `.env.example`
+documents every variable, including the callback URL to register.
 [CONTRIBUTING.md](CONTRIBUTING.md#set-up-your-local-copy) walks through both
 from scratch, including MongoDB Atlas free-tier setup, if you have not done this
 before.

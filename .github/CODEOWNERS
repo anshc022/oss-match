@@ -1,0 +1,13 @@
+# Every pull request gets a review request automatically. This is about making
+# sure nothing waits unnoticed, not about restricting who may contribute.
+*       @anshc022
+
+# The scoring weights decide what every user is shown, and the fetcher is what
+# stands between this project and GitHub's rate limits. Both are easy to change
+# and hard to change safely, so they always want a second look.
+/src/lib/scoring.ts   @anshc022
+/src/lib/fetcher/     @anshc022
+
+# Auth and the demo back door.
+/src/lib/auth.ts      @anshc022
+/src/lib/demo.ts      @anshc022
