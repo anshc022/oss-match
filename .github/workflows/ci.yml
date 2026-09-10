@@ -11,8 +11,9 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
-    name: lint · typecheck · test · build
+  # The job id is the name of the check that branch protection requires on
+  # main. Renaming it means updating the protection rule too.
+  ci:
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
