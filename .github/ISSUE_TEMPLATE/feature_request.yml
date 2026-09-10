@@ -1,0 +1,72 @@
+name: Feature request
+description: Suggest an improvement or a new capability.
+title: "[Feature]: "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Ideas are welcome, including small ones. If you would like to build it
+        yourself, say so at the bottom and we will help you scope it.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve?
+      description: Describe the situation you hit, not the solution yet.
+      placeholder: I cannot tell which issues I already opened a pull request for.
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: What would you like to happen?
+      placeholder: Show a "you have a PR open" badge on saved issues.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app would this touch?
+      options:
+        - Landing page
+        - Onboarding
+        - Feed (swipe or list)
+        - Matching algorithm
+        - Issue detail / contributor guide
+        - Repo Deep Dive
+        - Skill graph
+        - Mentor matching
+        - Saved list or profile
+        - Background fetcher / cron
+        - Developer experience (docs, tests, tooling)
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives you considered
+      description: Optional. Including "none" is a fine answer.
+
+  - type: dropdown
+    id: help
+    attributes:
+      label: Would you like to work on this?
+      options:
+        - "Yes, and I know where to start"
+        - "Yes, but I would need pointers"
+        - "No, just suggesting it"
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true

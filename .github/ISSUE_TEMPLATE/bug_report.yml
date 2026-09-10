@@ -1,0 +1,100 @@
+name: Bug report
+description: Something in OSS Match behaves differently from what you expected.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to file this. Fill in what you can; a partial
+        report is far better than no report.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: Describe the behaviour you saw.
+      placeholder: The swipe feed showed the same issue twice after I skipped it.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What did you expect instead?
+      placeholder: A skipped issue should not come back in the same session.
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Number them if you can. Include the page you were on.
+      value: |
+        1. Sign in with GitHub
+        2. Go to /feed
+        3. ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Which part of the app?
+      options:
+        - Landing page
+        - Onboarding
+        - Feed (swipe)
+        - Feed (list)
+        - Issue detail / contributor guide
+        - Repo Deep Dive
+        - Skill graph
+        - Mentor matching
+        - Saved list or profile
+        - Background fetcher / cron
+        - Not sure
+    validations:
+      required: true
+
+  - type: input
+    id: issue-link
+    attributes:
+      label: GitHub issue or repo involved
+      description: If the bug only shows up for one repo or issue, paste the link.
+      placeholder: https://github.com/owner/repo/issues/123
+
+  - type: dropdown
+    id: environment
+    attributes:
+      label: Where did you see it?
+      options:
+        - Local dev server (npm run dev)
+        - Local production build (npm run build && npm start)
+        - Deployed preview
+        - Deployed production
+    validations:
+      required: true
+
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and OS
+      placeholder: Chrome 141 on macOS 15
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Console or terminal output
+      description: Paste any errors. This is rendered as code, so no backticks needed.
+      render: shell
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before you submit
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: My report contains no secrets, tokens, or connection strings.
+          required: true

@@ -1,0 +1,49 @@
+name: Fetch issues
+
+# Vercel's Hobby plan runs cron jobs at most once a day, which is not often
+# enough to keep the feed fresh. This workflow is the real schedule: it calls
+# the deployed cron route, which does the work and writes to MongoDB.
+#
+# Needs two repository secrets:
+#   APP_URL      https://your-deployment.vercel.app  (no trailing slash)
+#   CRON_SECRET  the same value set in the Vercel project
+
+on:
+  schedule:
+    # Every three hours. Hacktoberfest months can be tightened to hourly.
+    - cron: "0 */3 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: "Refresh every query, ignoring the freshness window"
+        type: boolean
+        default: false
+
+jobs:
+  fetch:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Call the cron route
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          CRON_SECRET: ${{ secrets.CRON_SECRET }}
+          FORCE: ${{ inputs.force }}
+        run: |
+          if [ -z "$APP_URL" ] || [ -z "$CRON_SECRET" ]; then
+            echo "APP_URL or CRON_SECRET is not set on this repository." >&2
+            exit 1
+          fi
+          url="$APP_URL/api/cron/fetch-issues"
+          if [ "$FORCE" = "true" ]; then url="$url?force=1"; fi
+
+          # Body goes to a file so a failure can print it without the URL or
+          # the secret ever reaching the log.
+          code=$(curl -sS -o response.json -w '%{http_code}' \
+            -H "Authorization: Bearer $CRON_SECRET" \
+            --max-time 120 "$url")
+
+          echo "HTTP $code"
+          cat response.json
+          echo
+          test "$code" = "200"

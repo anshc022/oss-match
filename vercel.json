@@ -1,0 +1,20 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "crons": [
+    {
+      "path": "/api/cron/fetch-issues",
+      "schedule": "0 3 * * *"
+    }
+  ],
+  "functions": {
+    "src/app/api/cron/fetch-issues/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/skillgraph/route.ts": {
+      "maxDuration": 60
+    },
+    "src/app/api/repos/deepdive/route.ts": {
+      "maxDuration": 60
+    }
+  }
+}

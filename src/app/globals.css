@@ -1,0 +1,214 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Light is the base. Dark overrides via the `dark` class (next-themes). */
+  :root {
+    --background: 250 33% 98%;
+    --foreground: 252 32% 10%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 252 32% 10%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 252 32% 10%;
+
+    /* Iris, deepened for contrast on white. */
+    --primary: 258 80% 54%;
+    --primary-foreground: 250 40% 99%;
+
+    --secondary: 250 26% 94%;
+    --secondary-foreground: 252 28% 16%;
+
+    --muted: 250 26% 94%;
+    --muted-foreground: 250 10% 42%;
+
+    --accent: 250 28% 92%;
+    --accent-foreground: 252 32% 10%;
+
+    --destructive: 349 78% 50%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 250 18% 87%;
+    --input: 250 18% 87%;
+    --ring: 258 80% 54%;
+
+    --radius: 0.625rem;
+
+    /* Extended palette. Iris leads, cyan carries data, amber is reserved
+       for Hacktoberfest so seasonal UI never fights the brand colour. */
+    --iris: 258 80% 54%;
+    --iris-deep: 262 72% 40%;
+    --cyan: 189 92% 34%;
+    --amber: 30 96% 44%;
+    --rose: 340 82% 52%;
+
+    /* Ambient glow strength; the landing's blur and grain read from this. */
+    --glow-alpha: 0.28;
+    --grain-alpha: 0.07;
+  }
+
+  .dark {
+    --background: 252 28% 5%;
+    --foreground: 250 20% 93%;
+
+    --card: 252 24% 8%;
+    --card-foreground: 250 20% 93%;
+
+    --popover: 252 26% 7%;
+    --popover-foreground: 250 20% 93%;
+
+    --primary: 258 92% 70%;
+    --primary-foreground: 252 40% 7%;
+
+    --secondary: 252 18% 14%;
+    --secondary-foreground: 250 16% 88%;
+
+    --muted: 252 18% 14%;
+    --muted-foreground: 250 10% 60%;
+
+    --accent: 252 18% 17%;
+    --accent-foreground: 250 20% 93%;
+
+    --destructive: 349 82% 60%;
+    --destructive-foreground: 250 20% 96%;
+
+    --border: 252 16% 18%;
+    --input: 252 16% 18%;
+    --ring: 258 92% 70%;
+
+    --iris: 258 92% 70%;
+    --iris-deep: 262 72% 46%;
+    --cyan: 189 94% 58%;
+    --amber: 33 96% 60%;
+    --rose: 340 88% 66%;
+
+    --glow-alpha: 0.55;
+    --grain-alpha: 0.16;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+  ::selection {
+    background: hsl(var(--iris) / 0.28);
+  }
+  html {
+    color-scheme: light;
+  }
+  html.dark {
+    color-scheme: dark;
+  }
+  ::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-border;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(var(--iris) / 0.5);
+  }
+}
+
+@layer utilities {
+  /* Film grain. Kills the flat-gradient look that plain CSS blurs give. */
+  .grain::after {
+    content: "";
+    position: absolute;
+    inset: -50%;
+    pointer-events: none;
+    opacity: var(--grain-alpha);
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='300'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='300' height='300' filter='url(%23n)'/%3E%3C/svg%3E");
+    animation: grain-shift 8s steps(6) infinite;
+  }
+
+  /* Hairline grid, used as an architectural underlay rather than decoration. */
+  .bg-grid {
+    background-image:
+      linear-gradient(to right, hsl(var(--border) / 0.55) 1px, transparent 1px),
+      linear-gradient(to bottom, hsl(var(--border) / 0.55) 1px, transparent 1px);
+    background-size: 56px 56px;
+  }
+  .bg-grid-fade {
+    -webkit-mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+    mask-image: radial-gradient(ellipse 80% 60% at 50% 0%, #000 30%, transparent 78%);
+  }
+
+  /* Real perspective, so the hero stack has depth rather than a fake shadow. */
+  .scene {
+    perspective: 1400px;
+    perspective-origin: 60% 40%;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+
+  /* Duotone text fill used once, on the hero verb. */
+  .text-iris-gradient {
+    background: linear-gradient(
+      100deg,
+      hsl(var(--iris)) 0%,
+      hsl(var(--cyan)) 55%,
+      hsl(var(--iris)) 100%
+    );
+    background-size: 200% 100%;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: sheen 7s ease-in-out infinite;
+  }
+
+  .stroke-dash {
+    stroke-dasharray: var(--dash, 1200);
+    stroke-dashoffset: var(--dash, 1200);
+    animation: draw 2.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+}
+
+@keyframes grain-shift {
+  0% { transform: translate(0, 0); }
+  20% { transform: translate(-3%, 2%); }
+  40% { transform: translate(2%, -3%); }
+  60% { transform: translate(-2%, -2%); }
+  80% { transform: translate(3%, 1%); }
+  100% { transform: translate(0, 0); }
+}
+
+@keyframes sheen {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+@keyframes draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain::after,
+  .text-iris-gradient,
+  .stroke-dash {
+    animation: none;
+  }
+  .stroke-dash {
+    stroke-dashoffset: 0;
+  }
+}

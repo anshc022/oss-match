@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or setup help
+    url: https://github.com/anshc022/oss-match/discussions
+    about: Ask about running the project locally or how a feature is meant to work.
+  - name: Contributing guide
+    url: https://github.com/anshc022/oss-match/blob/main/CONTRIBUTING.md
+    about: Local setup, branch naming, and what makes a good first pull request.
