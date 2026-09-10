@@ -32,7 +32,7 @@ export function LogoMarquee() {
   return (
     <div
       className="relative overflow-hidden border-y border-border/70 py-4 [mask-image:linear-gradient(to_right,transparent,#000_10%,#000_90%,transparent)]"
-      aria-label="Languages and frameworks OSS Match indexes"
+      aria-label="Languages and frameworks FirstFork indexes"
     >
       <Row icons={LANGUAGES} />
       <Row icons={FRAMEWORKS} reverse className="mt-3" />

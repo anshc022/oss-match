@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ExternalLink, GitPullRequest, Trophy } from "lucide-react";
@@ -169,7 +170,9 @@ export default async function ProfilePage({ params }: { params: { username: stri
 
         <p className="mt-12 text-center font-mono text-[11px] text-muted-foreground">
           Portfolio built on{" "}
-          <Link href="/" className="text-iris hover:underline">oss/match</Link>
+          <Link href="/" className="text-iris hover:underline">
+            {BRAND.wordmark.lead}/{BRAND.wordmark.tail}
+          </Link>
         </p>
       </main>
     </div>

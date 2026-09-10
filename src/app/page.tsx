@@ -1,3 +1,4 @@
+import { BRAND } from "@/lib/brand";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
@@ -56,7 +57,7 @@ export default async function LandingPage() {
               className="mt-7 max-w-[34rem] text-pretty text-lg leading-relaxed text-muted-foreground animate-rise-in"
               style={{ animationDelay: "160ms" }}
             >
-              OSS Match scores real GitHub issues on six signals against your
+              FirstFork scores real GitHub issues on six signals against your
               languages and level, then walks you through the pull request one
               copy-pasteable command at a time.
             </p>
@@ -190,7 +191,7 @@ export default async function LandingPage() {
 
       <footer className="relative z-[2] border-t border-border/70">
         <div className="container flex flex-col gap-2 py-8 font-mono text-[11px] text-muted-foreground sm:flex-row sm:items-center sm:justify-between">
-          <span>oss/match</span>
+          <span>{BRAND.wordmark.lead}/{BRAND.wordmark.tail}</span>
           <span>Issue data from the GitHub API. Not affiliated with GitHub.</span>
         </div>
       </footer>
