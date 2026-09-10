@@ -103,15 +103,41 @@ function toCandidate(item: SearchItem): CandidateIssue {
   };
 }
 
-async function searchRepo(
+/**
+ * Search rejects a renamed repository with 422 rather than following the
+ * redirect, while the repos endpoint does follow it. Roughly a fifth of a
+ * vendored list has moved by the time it is used, so a rename is worth one
+ * extra call to recover rather than a skipped repository.
+ *
+ * Returns the canonical name, or null when the repository is really gone.
+ */
+async function canonicalName(
   repo: string,
   queue: RateLimitedQueue,
   octokit: Octokit,
-): Promise<{ items: CandidateIssue[] | null; status: number; unchanged?: boolean; error?: string }> {
-  await dbConnect();
-  const key = curatedKey(repo);
-  const cached = await ApiCache.findOne({ queryKey: key }).lean();
+): Promise<string | null> {
+  const [owner, name] = repo.split("/");
+  if (!owner || !name) return null;
+  const out = await queue.run(async () => {
+    try {
+      const res = await octokit.request("GET /repos/{owner}/{repo}", { owner, repo: name });
+      queue.observe(res.headers as Record<string, unknown>);
+      return res.data.full_name as string;
+    } catch (err) {
+      const headers = (err as { response?: { headers?: Record<string, unknown> } }).response?.headers;
+      queue.observe(headers);
+      return null;
+    }
+  }, "core");
+  return out ?? null;
+}
 
+/** One search call. Returns null items on any non-200 so the caller can react. */
+async function searchOnce(
+  repo: string,
+  queue: RateLimitedQueue,
+  octokit: Octokit,
+): Promise<{ items: CandidateIssue[] | null; status: number; etag?: string; error?: string }> {
   const outcome = await queue.run(async () => {
     try {
       const res = await octokit.request("GET /search/issues", {
@@ -138,8 +164,6 @@ async function searchRepo(
       queue.penalise("search", retryAfterSeconds(outcome.err));
       return { items: null, status, error: "secondary rate limit" };
     }
-    // A renamed, deleted or newly private repository 404s. That is expected on
-    // a vendored list and is not worth failing the pass over.
     return {
       items: null,
       status,
@@ -147,7 +171,37 @@ async function searchRepo(
     };
   }
 
-  const items = (outcome.res!.data.items as SearchItem[]).map(toCandidate);
+  return {
+    items: (outcome.res!.data.items as SearchItem[]).map(toCandidate),
+    status: 200,
+    etag: outcome.res!.headers.etag as string | undefined,
+  };
+}
+
+async function searchRepo(
+  repo: string,
+  queue: RateLimitedQueue,
+  octokit: Octokit,
+): Promise<{ items: CandidateIssue[] | null; status: number; unchanged?: boolean; error?: string }> {
+  await dbConnect();
+  const key = curatedKey(repo);
+  const cached = await ApiCache.findOne({ queryKey: key }).lean();
+
+  let found = await searchOnce(repo, queue, octokit);
+
+  // 422 here means "cannot be searched", which is what a rename looks like.
+  // Resolve the current name and try once more before giving up.
+  if (found.status === 422) {
+    const moved = await canonicalName(repo, queue, octokit);
+    if (moved && moved.toLowerCase() !== repo.toLowerCase()) {
+      console.log(`[curated] ${repo} -> ${moved}`);
+      found = await searchOnce(moved, queue, octokit);
+    }
+  }
+
+  if (!found.items) return { items: null, status: found.status, error: found.error };
+
+  const items = found.items;
   const resultHash = hashResults(items);
   const unchanged = Boolean(cached?.resultHash) && cached!.resultHash === resultHash;
 
@@ -156,7 +210,7 @@ async function searchRepo(
     {
       $set: {
         queryKey: key,
-        etag: (outcome.res!.headers.etag as string) ?? cached?.etag ?? "",
+        etag: found.etag ?? cached?.etag ?? "",
         resultHash,
         lastFetchedAt: new Date(),
         lastStatus: 200,
