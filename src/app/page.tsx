@@ -16,6 +16,7 @@ import { getLandingStats } from "@/lib/landing-stats";
 import { ScoreAnatomy } from "@/components/landing/score-anatomy";
 import { Pipeline } from "@/components/landing/pipeline";
 import { SectionIndex } from "@/components/landing/section-index";
+import { ContributeBanner } from "@/components/landing/contribute-banner";
 import { GUIDE_STEPS } from "@/lib/guide";
 import { WEIGHTS } from "@/lib/scoring";
 
@@ -150,6 +151,8 @@ export default async function LandingPage() {
           </div>
         </div>
       </section>
+
+      <ContributeBanner />
 
       {/* ----------------------------------------------------------- cta */}
       <section className="relative z-[2] border-t border-border/70">
