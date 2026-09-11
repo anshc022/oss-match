@@ -24,6 +24,7 @@ import type { GuideStep } from "@/lib/guide";
 import type { SavedIssueRecord } from "@/lib/feed-types";
 import type { ContributingSummary } from "@/lib/contributing-types";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 export function ContributionGuide({
   issue,
@@ -91,6 +92,14 @@ export function ContributionGuide({
   return (
     <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
       <aside className="space-y-4">
+        <div className="hidden items-end gap-3 lg:flex">
+          <Character role="builder" unit={3.8} title="The guide: walks the pull request step by step" />
+          <p className="pb-2 font-mono text-[11px] leading-snug text-muted-foreground">
+            Step by step,
+            <br />
+            filled in for this repo.
+          </p>
+        </div>
         <Card className="border-border/60 bg-card/70">
           <CardHeader className="pb-3">
             <p className="truncate font-mono text-xs text-muted-foreground">

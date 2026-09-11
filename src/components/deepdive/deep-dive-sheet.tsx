@@ -15,6 +15,7 @@ import { ArchGraph2D } from "@/components/deepdive/arch-graph-2d";
 import { hasWebGL } from "@/components/deepdive/webgl";
 import { STAGE_COPY, type ArchModule, type DeepDive, type DeepDiveStage, type IssueLocation } from "@/lib/deepdive/types";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 const ArchGraph = dynamic(() => import("@/components/deepdive/arch-graph"), {
   ssr: false,
@@ -259,7 +260,11 @@ function Loading({ stage }: { stage: DeepDiveStage }) {
   const idx = Math.max(0, STAGES.indexOf(stage));
   return (
     <div className="space-y-6">
-      <ol className="space-y-2">
+      <div className="flex items-start gap-5">
+        <div className="hidden sm:block">
+          <Character role="beret" unit={4} title="Deep Dive: maps the repository" />
+        </div>
+      <ol className="flex-1 space-y-2">
         {STAGES.map((s, i) => {
           const done = i < idx, now = i === idx;
           return (
@@ -272,6 +277,7 @@ function Loading({ stage }: { stage: DeepDiveStage }) {
           );
         })}
       </ol>
+      </div>
       <div className="relative h-1 overflow-hidden rounded-full bg-border">
         <motion.div className="absolute inset-y-0 w-1/3 rounded-full bg-iris" animate={{ x: ["-100%", "300%"] }} transition={{ duration: 1.6, repeat: Infinity, ease: "easeInOut" }} />
       </div>

@@ -2,7 +2,7 @@
 
 import { useMemo, useState } from "react";
 import Link from "next/link";
-import { Bookmark, ExternalLink, ListChecks, Trophy } from "lucide-react";
+import { ExternalLink, ListChecks, Trophy } from "lucide-react";
 import { toast } from "sonner";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -12,6 +12,7 @@ import { relativeTime, scoreTone } from "@/lib/format";
 import { ISSUE_STATUSES, type IssueStatus } from "@/lib/constants";
 import type { SavedIssueRecord } from "@/lib/feed-types";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 const FILTERS = ["all", ...ISSUE_STATUSES] as const;
 type Filter = (typeof FILTERS)[number];
@@ -198,8 +199,8 @@ export function SavedEmpty() {
   return (
     <div className="relative overflow-hidden rounded-2xl border border-border/70 bg-card/70 p-10 text-center sm:p-14">
       <div aria-hidden className="pointer-events-none absolute -right-20 -top-20 size-64 rounded-full bg-iris/15 blur-3xl" />
-      <div className="relative mx-auto flex size-12 items-center justify-center rounded-full border border-iris/30 bg-iris/10">
-        <Bookmark className="size-5 text-iris" />
+      <div className="relative mx-auto flex justify-center">
+        <Character role="reader" unit={5} title="Nothing on the reading list yet" />
       </div>
       <h2 className="relative mt-5 font-mono text-lg font-medium">Nothing saved yet</h2>
       <p className="relative mx-auto mt-2 max-w-md text-pretty text-sm leading-relaxed text-muted-foreground">

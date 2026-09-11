@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 /** Loading, error and empty states shared by the deck and the list view. */
 
@@ -118,6 +119,7 @@ export function EmptyState({
   return (
     <Card className="mx-auto w-full max-w-lg border-border/70 bg-card/80">
       <CardContent className="flex flex-col items-center gap-4 p-10 text-center">
+        <Character role="hood" unit={4.6} title="The fetcher, which indexes new issues on a schedule" />
         <h2 className="font-mono text-lg font-medium">{title}</h2>
         <p className="text-sm leading-relaxed text-muted-foreground">{body}</p>
         {action}

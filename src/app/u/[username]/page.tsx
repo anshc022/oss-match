@@ -16,6 +16,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { relativeTime } from "@/lib/format";
 import { INTEREST_COPY, SKILL_LEVEL_COPY, type Interest, type SkillLevel } from "@/lib/constants";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 export const dynamic = "force-dynamic";
 
@@ -55,6 +56,10 @@ export default async function ProfilePage({ params }: { params: { username: stri
             <AvatarImage src={user.avatarUrl} alt={user.username} />
             <AvatarFallback className="font-mono">{user.username.slice(0, 2).toUpperCase()}</AvatarFallback>
           </Avatar>
+
+          <div className="order-last hidden self-end sm:block">
+            <Character role="cap" unit={4.2} title="Skill graph: reads contribution history" />
+          </div>
 
           <div className="min-w-0 flex-1">
             <p className="flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em] text-iris">

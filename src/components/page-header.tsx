@@ -9,10 +9,13 @@ export function PageHeader({
   title,
   description,
   actions,
+  figure,
   children,
   className,
 }: {
   eyebrow?: string;
+  /** A character for the page, drawn at the right. Hidden on small screens. */
+  figure?: React.ReactNode;
   title: React.ReactNode;
   description?: React.ReactNode;
   actions?: React.ReactNode;
@@ -36,7 +39,12 @@ export function PageHeader({
         )}
         {children && <div className="mt-4 flex flex-wrap items-center gap-1.5">{children}</div>}
       </div>
-      {actions && <div className="flex shrink-0 items-center gap-2">{actions}</div>}
+      {(actions || figure) && (
+        <div className="flex shrink-0 items-end gap-5">
+          {figure && <div className="hidden sm:block">{figure}</div>}
+          {actions && <div className="flex items-center gap-2">{actions}</div>}
+        </div>
+      )}
     </div>
   );
 }
