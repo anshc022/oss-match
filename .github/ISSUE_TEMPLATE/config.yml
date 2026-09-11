@@ -1,8 +1,12 @@
-blank_issues_enabled: false
+# Anyone can open a plain issue. The forms are there to help, not to gate.
+blank_issues_enabled: true
 contact_links:
   - name: Question or setup help
     url: https://github.com/anshc022/oss-match/discussions
     about: Ask about running the project locally or how a feature is meant to work.
+  - name: Just send a pull request
+    url: https://github.com/anshc022/oss-match/blob/main/CONTRIBUTING.md#run-it-in-one-command
+    about: Building a feature nobody asked for is welcome. No issue needed first.
   - name: Contributing guide
     url: https://github.com/anshc022/oss-match/blob/main/CONTRIBUTING.md
     about: Local setup, branch naming, and what makes a good first pull request.

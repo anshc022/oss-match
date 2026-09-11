@@ -1,4 +1,8 @@
-# OSS Match
+<p align="center">
+  <img src="docs/banner.png" alt="FirstFork — open to contributions. Any feature is fair game." width="100%">
+</p>
+
+# FirstFork
 
 [![CI](https://github.com/anshc022/oss-match/actions/workflows/ci.yml/badge.svg)](https://github.com/anshc022/oss-match/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
@@ -13,6 +17,33 @@ actually picked.
 of what makes a good first pull request. Issues labelled
 [`good first issue`](https://github.com/anshc022/oss-match/labels/good%20first%20issue)
 are picked to be a reasonable first landing spot.
+
+## Open to contributions
+
+You do not need permission to build something here.
+
+- **Pick an open issue**, or **open a pull request for an idea nobody has raised
+  yet**. Both are welcome. There is no proposal process to clear first.
+- **Any feature is fair game.** If it fits the project and the code is sound, it
+  gets merged. If it does not fit, you will get a reason, not silence.
+- **You do not have to finish alone.** Open a draft pull request early and ask.
+  A half-working branch with a question attached is a perfectly good thing to
+  send.
+- **Not code counts too.** Documentation, a test for untested behaviour, an
+  accessibility fix, a bug report with real reproduction steps.
+
+Claiming an issue is one comment saying you want it. It is yours from then on,
+and nobody will take it out from under you.
+
+The setup is one command and needs no accounts:
+
+```bash
+npm install && npm run demo
+```
+
+Everything worth knowing before your first pull request is in
+[CONTRIBUTING.md](CONTRIBUTING.md): branch naming, what the checks run, and what
+happens after you open it.
 
 ## Screenshots
 
