@@ -9,6 +9,12 @@ body:
         Ideas are welcome, including small ones. If you would like to build it
         yourself, say so at the bottom and we will help you scope it.
 
+        **You do not have to ask first.** If you would rather just build it and
+        open a pull request, do that instead of filing this. Any feature is fair
+        game: if it fits the project and the code is sound, it gets merged. This
+        form is for when you want to talk it through, or want someone else to
+        pick it up.
+
   - type: textarea
     id: problem
     attributes:
