@@ -5,6 +5,7 @@ import { ArrowUpRight, ExternalLink, Loader2, MessageCircleQuestion, Sparkles } 
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 type Mentor = { username: string; avatarUrl: string; reason: string };
 type Payload = { mentors: Mentor[]; computing: boolean; source: string; aiEnabled: boolean };
@@ -82,6 +83,9 @@ export function MentorCard({
         </div>
 
         <div className="relative flex flex-col gap-5 p-5 sm:flex-row sm:items-center sm:gap-6">
+          <div className="hidden sm:order-last sm:ml-auto sm:block">
+            <Character role="headset" unit={3.6} title="Mentor: the person to ask first" />
+          </div>
           {!data && (
             <p className="flex items-center gap-2 font-mono text-[12px] text-muted-foreground">
               <Loader2 className="size-3.5 animate-spin" /> checking who is active on {repo}…

@@ -11,6 +11,7 @@ import { PageHeader } from "@/components/page-header";
 import { SavedEmpty, SavedList } from "@/components/saved-list";
 import { Button } from "@/components/ui/button";
 import type { SavedIssueRecord } from "@/lib/feed-types";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "My list" };
@@ -39,6 +40,7 @@ export default async function SavedPage() {
           eyebrow="my list"
           title="Issues you kept"
           description="Every saved issue with how far you got on its guide. Finish all eight steps and you can mark it contributed."
+          figure={<Character role="reader" unit={4.4} title="Your reading list" />}
           actions={
             <Button asChild variant="outline" size="sm" className="font-mono text-xs">
               <Link href="/feed">

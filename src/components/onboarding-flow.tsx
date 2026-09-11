@@ -32,6 +32,7 @@ import {
   type TimeAvailability,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 type Initial = {
   skillLevel: SkillLevel | null;
@@ -136,6 +137,9 @@ export function OnboardingFlow({
           <h1 className="mt-1 truncate font-mono text-xl font-semibold tracking-tight sm:text-2xl">
             {alreadyOnboarded ? `Tune your feed, @${username}` : `Hi ${name?.split(" ")[0] || `@${username}`}, let's build your feed.`}
           </h1>
+        </div>
+        <div className="ml-auto hidden shrink-0 sm:block">
+          <Character role="guide" unit={3.6} title="FirstFork, here to set up your feed" />
         </div>
       </div>
 

@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button";
 import { LandingNav } from "@/components/landing/landing-nav";
 import { HeroScene } from "@/components/landing/hero-scene";
 import { LogoMarquee } from "@/components/landing/logo-marquee";
+import { StoryChapter } from "@/components/landing/story-chapter";
 import { TerminalReplay } from "@/components/landing/terminal-replay";
 import { Bento } from "@/components/landing/bento";
 import { getLandingStats } from "@/lib/landing-stats";
@@ -102,10 +103,12 @@ export default async function LandingPage() {
         <LogoMarquee />
       </div>
 
+      <StoryChapter />
+
       {/* --------------------------------------------------------- scoring */}
       <section id="scoring" className="relative z-[2] scroll-mt-24">
         <div className="container py-28">
-          <SectionIndex n="02" label="scoring" title="Six signals. One number you can argue with.">
+          <SectionIndex n="03" label="scoring" title="Six signals. One number you can argue with.">
             Every factor is normalised to 0–1 and combined with a fixed weight.
             The weights sum to one, so a card&apos;s score reads directly as a
             percentage, and the breakdown is shown on every card. Nothing is
@@ -120,7 +123,7 @@ export default async function LandingPage() {
       {/* --------------------------------------------------------- bento */}
       <section className="relative z-[2] border-t border-border/70">
         <div className="container py-28">
-          <SectionIndex n="03" label="what you get" title="Built for the first pull request, not the fiftieth.">
+          <SectionIndex n="04" label="what you get" title="Built for the first pull request, not the fiftieth.">
             The parts that trip people up are not the code. They are the forty
             minutes of setup and etiquette around it. Those are handled.
           </SectionIndex>
@@ -135,7 +138,7 @@ export default async function LandingPage() {
         <div className="container grid gap-16 py-28 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="lg:sticky lg:top-28">
-              <SectionIndex n="04" label="guide" title="Then it teaches you the rest.">
+              <SectionIndex n="05" label="guide" title="Then it teaches you the rest.">
                 Finding an issue is not what stops first-timers. It is the eight
                 steps after. Save one and you get this checklist filled in with
                 that repo&apos;s clone URL, that issue&apos;s number, and a branch
@@ -168,7 +171,7 @@ export default async function LandingPage() {
             />
             <div className="relative grid gap-8 lg:grid-cols-12 lg:items-end">
               <div className="lg:col-span-8">
-                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-iris">05 &nbsp;·&nbsp; start</p>
+                <p className="font-mono text-[11px] uppercase tracking-[0.22em] text-iris">06 &nbsp;·&nbsp; start</p>
                 <h2 className="mt-4 font-mono text-3xl font-semibold leading-[1.05] tracking-tight sm:text-5xl">
                   Your first pull request
                   <br />

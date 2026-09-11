@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono } from "next/font/google";
+import { Caveat, Inter, JetBrains_Mono } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import { Providers } from "@/components/providers";
 import { BRAND } from "@/lib/brand";
@@ -14,6 +14,14 @@ const inter = Inter({
 const mono = JetBrains_Mono({
   subsets: ["latin"],
   variable: "--font-mono",
+  display: "swap",
+});
+
+// Handwritten annotations in the landing story. Loaded here so it is subset
+// and self-hosted like the other two, not fetched from Google at runtime.
+const hand = Caveat({
+  subsets: ["latin"],
+  variable: "--font-hand",
   display: "swap",
 });
 
@@ -76,7 +84,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${inter.variable} ${mono.variable} min-h-dvh bg-background font-sans antialiased`}
+        className={`${inter.variable} ${mono.variable} ${hand.variable} min-h-dvh bg-background font-sans antialiased`}
       >
         <script
           type="application/ld+json"

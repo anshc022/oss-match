@@ -6,6 +6,7 @@ import { FeedView } from "@/components/feed-view";
 import { Badge } from "@/components/ui/badge";
 import { PageHeader } from "@/components/page-header";
 import { hacktoberfestMode } from "@/lib/fetcher/queries";
+import { Character } from "@/components/landing/story/voxel-figure";
 
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Your feed" };
@@ -26,6 +27,7 @@ export default async function FeedPage() {
             eyebrow="feed"
             title="Matched for you"
             description="Ranked against your languages, level and interests. Save what looks right; skip the rest."
+            figure={<Character role="crown" unit={4.4} title="Match score: scores every issue for you" />}
           >
             {(user.languages ?? []).slice(0, 6).map((lang) => (
               <Badge
