@@ -3,7 +3,8 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { Blocks, LogOut, Bookmark, Layers, User as UserIcon } from "lucide-react";
+import { LogOut, Bookmark, Layers, User as UserIcon } from "lucide-react";
+import { BrandLockup } from "@/components/brand-mark";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -29,11 +30,8 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 border-b border-border/60 bg-background/70 backdrop-blur-xl">
       <div className="container flex h-14 items-center gap-3 sm:gap-6">
-        <Link href="/" className="flex shrink-0 items-center gap-2 py-2">
-          <Blocks className="size-5 text-primary" />
-          <span className="font-mono text-sm font-semibold tracking-tight">
-            oss<span className="text-primary">/</span>match
-          </span>
+        <Link href="/" className="shrink-0 py-2">
+          <BrandLockup />
         </Link>
 
         {session?.user && (
