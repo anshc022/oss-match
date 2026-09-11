@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn } from "next-auth/react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Loader2 } from "lucide-react";
 import { GithubMark } from "@/components/github-mark";
@@ -14,6 +14,23 @@ export function SignInButton({
   label?: string;
 }) {
   const [pending, setPending] = useState(false);
+  const [demo, setDemo] = useState(false);
+
+  // Demo mode is a server-side decision, so the button asks which providers
+  // are actually configured rather than reading an environment variable that
+  // the browser cannot see.
+  useEffect(() => {
+    let live = true;
+    fetch("/api/auth/providers")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((p) => {
+        if (live && p) setDemo(Boolean(p.demo));
+      })
+      .catch(() => {});
+    return () => {
+      live = false;
+    };
+  }, []);
 
   return (
     <Button
@@ -22,7 +39,7 @@ export function SignInButton({
       disabled={pending}
       onClick={() => {
         setPending(true);
-        signIn("github", { callbackUrl: "/onboarding" });
+        signIn(demo ? "demo" : "github", { callbackUrl: "/onboarding" });
       }}
     >
       {pending ? (
@@ -30,7 +47,7 @@ export function SignInButton({
       ) : (
         <GithubMark className="size-4" />
       )}
-      {label}
+      {demo ? "Continue with the demo account" : label}
     </Button>
   );
 }
