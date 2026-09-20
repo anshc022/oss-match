@@ -95,10 +95,38 @@ npm run dev
 ```
 
 That path needs a MongoDB instance and a GitHub OAuth app. `.env.example`
-documents every variable, including the callback URL to register.
+is where values are set; the table below is the explanation. Do not put
+real values in the README.
 [CONTRIBUTING.md](CONTRIBUTING.md#set-up-your-local-copy) walks through both
 from scratch, including MongoDB Atlas free-tier setup, if you have not done this
 before.
+
+### Environment variables
+
+What each variable in `.env.example` does, whether you need it before
+`npm run dev`, and what the code does when it is missing. Behaviour is taken
+from the current source (`src/lib/mongodb.ts`, `src/lib/auth.ts`,
+`src/lib/github-app-client.ts`, `src/lib/llm.ts`,
+`src/app/api/cron/fetch-issues/route.ts`, `src/lib/fetcher/queries.ts`).
+
+| Variable | Required | Without it |
+| --- | --- | --- |
+| `MONGODB_URI` | yes (full setup) | `dbConnect()` throws; the app cannot start. Not needed for `npm run demo`, which uses an in-memory database. |
+| `NEXTAUTH_SECRET` | yes (full setup / GitHub sign-in) | NextAuth cannot sign JWTs; GitHub sign-in will fail. `npm run demo` generates one if it is missing. |
+| `NEXTAUTH_URL` | no (has a default) | Falls back to `http://localhost:3000` in the demo script. Set this to the public origin in a deployed environment. |
+| `GITHUB_CLIENT_ID` | yes for GitHub sign-in | The GitHub OAuth provider is registered with an empty id; GitHub login will not work. Demo sign-in does not use it. |
+| `GITHUB_CLIENT_SECRET` | yes for GitHub sign-in | Same as `GITHUB_CLIENT_ID`: GitHub login will not complete. |
+| `GITHUB_APP_ID` | no | The scheduled fetcher skips GitHub App auth. It then tries `GITHUB_TOKEN`, then an anonymous client. |
+| `GITHUB_APP_PRIVATE_KEY` | no (needed only with the App) | Incomplete App credentials are ignored; same fallback as a missing `GITHUB_APP_ID`. |
+| `GITHUB_APP_INSTALLATION_ID` | no (needed only with the App) | Incomplete App credentials are ignored; same fallback as a missing `GITHUB_APP_ID`. |
+| `GITHUB_TOKEN` | in practice, if no GitHub App | Fetcher and request-path GitHub calls run unauthenticated: 60 core requests/hour and 10 searches/minute, which one fetch cycle can exhaust. |
+| `CRON_SECRET` | yes for `/api/cron/fetch-issues` | The route refuses to run and returns 404 to every caller, so the feed is never populated by cron. |
+| `FETCH_BOOST_MODE` | no | Defaults to off. Normal queries refresh every 3 hours instead of every hour. |
+| `HACKTOBERFEST_MODE` | no | Defaults to off. No extra `hacktoberfest` query, no 30-minute refresh, no Hacktoberfest badge or filter in the feed. When `true`, it also implies boost mode. |
+| `LLM_API_KEY` | no | Skill graph, mentors and the Deep Dive architecture map fall back to heuristics built from GitHub activity. |
+| `LLM_BASE_URL` | no | Defaults to `https://api.b.ai/v1`. Unused when `LLM_API_KEY` is unset. |
+| `LLM_MODEL` | no | Defaults to `glm-5.3-flash`. Unused when `LLM_API_KEY` is unset. |
+
 
 The feed reads from MongoDB rather than from GitHub, so a fresh database shows
 nothing until the fetcher has run once:
