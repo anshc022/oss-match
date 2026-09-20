@@ -93,6 +93,44 @@ test("highlight helpers open the right folders", () => {
   assert.ok(!isHighlighted("src/apple.ts", ["src/app"]), "prefix must be a whole path segment");
 });
 
+test("ancestorsOf returns unique parent folders", () => {
+  assert.deepEqual(
+    Array.from(ancestorsOf(["features/Preferences/data"])).sort(),
+    ["features", "features/Preferences"]
+  );
+  
+  assert.deepEqual(
+    Array.from(ancestorsOf(["src/a", "src/b"])).sort(),
+    ["src"]
+  );
+
+  assert.deepEqual(
+    Array.from(ancestorsOf(["FILE.txt"])),
+    []
+  );
+
+  assert.deepEqual(
+    Array.from(ancestorsOf([])),
+    []
+  );
+});
+
+test("isHighlighted matches exact, descendant, and ancestor paths", () => {
+  assert.ok(isHighlighted("src/components", ["src/components"]));
+
+  assert.ok(isHighlighted("src/components/Button", ["src/components"]));
+
+  assert.ok(isHighlighted("src", ["src/components"]));
+
+  assert.ok(isHighlighted("src/components/Button", ["src/components/"]));
+
+  assert.ok(!isHighlighted("src/components-old", ["src/components"]));
+
+  assert.ok(isHighlighted("src/components/Button", ["", "src/components"]));
+  
+  assert.ok(!isHighlighted("src/components", [""]));
+});
+
 function structure(): RepoStructure {
   return {
     fullName: "acme/app", defaultBranch: "main", tree: tree(), totalFiles: 11, truncated: false,
